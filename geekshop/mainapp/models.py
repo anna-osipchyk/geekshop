@@ -12,17 +12,13 @@ class ProductCategory(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(
-        ProductCategory, related_name="product", on_delete=models.CASCADE)
+    category = models.ForeignKey(ProductCategory, related_name="product", on_delete=models.CASCADE)
     name = models.CharField(max_length=128, verbose_name="имя")
     image = models.ImageField(blank=True, upload_to="products_images")
-    short_desc = models.TextField(
-        max_length=60, blank=True, verbose_name="краткое описание")
+    short_desc = models.TextField(max_length=60, blank=True, verbose_name="краткое описание")
     description = models.TextField(blank=True, verbose_name="описание")
-    price = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, verbose_name="цена")
-    quantity = models.PositiveIntegerField(
-        default=0, verbose_name="количество на складе")
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name="цена")
+    quantity = models.PositiveIntegerField(default=0, verbose_name="количество на складе")
 
     def __str__(self):
         return f"{self.name} ({self.category.name})"
