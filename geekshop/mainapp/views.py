@@ -1,10 +1,13 @@
+import random
+
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
-import random
+
 from basketapp.models import Basket
 
 from .models import Contact, Product, ProductCategory
+
 
 def get_basket(user):
     if user.is_authenticated:
@@ -61,7 +64,7 @@ def products(request, pk=None):
         "same_products": same_products,
         "media_url": settings.MEDIA_URL,
         "basket": basket,
-        "hot_product": hot_product
+        "hot_product": hot_product,
     }
     if pk:
         print(f"User select category: {pk}")
