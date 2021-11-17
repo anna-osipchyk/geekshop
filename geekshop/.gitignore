@@ -218,3 +218,4 @@ fabric.properties
 
 # Local History for Visual Studio Code
 .history/
+/static/js/jquery/
