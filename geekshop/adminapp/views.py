@@ -1,18 +1,19 @@
 from django.conf import settings
-from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import user_passes_test
-from authnapp.models import ShopUser
-from mainapp.models import Product, ProductCategory
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from adminapp.forms import *
 from authnapp.forms import ShopUserRegisterForm
 from authnapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
+
+
 @user_passes_test(lambda u: u.is_superuser)
 def admin_main(request):
     response = redirect("admin:users")
     return response
+
 
 @user_passes_test(lambda u: u.is_superuser)
 def users(request):
@@ -55,7 +56,6 @@ def user_update(request, pk):
     return render(request, "adminapp/user_update.html", content)
 
 
-
 def user_delete(request, pk):
     title = "пользователи/удаление"
 
@@ -69,6 +69,7 @@ def user_delete(request, pk):
     content = {"title": title, "user_to_delete": user, "media_url": settings.MEDIA_URL}
 
     return render(request, "adminapp/user_delete.html", content)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 def categories(request):
@@ -111,7 +112,6 @@ def category_update(request, pk):
     content = {"title": title, "update_form": edit_form, "media_url": settings.MEDIA_URL}
 
     return render(request, "adminapp/category_update.html", content)
-
 
 
 @user_passes_test(lambda u: u.is_superuser)
