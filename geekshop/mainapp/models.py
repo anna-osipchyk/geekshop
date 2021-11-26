@@ -20,6 +20,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, verbose_name="описание")
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name="цена")
     quantity = models.PositiveIntegerField(default=0, verbose_name="количество на складе")
+    is_active = models.BooleanField(verbose_name="продукт активен", default=True)
 
     def __str__(self):
         return f"{self.name} ({self.category.name})"
