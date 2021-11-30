@@ -2,12 +2,9 @@ from django.db import migrations
 
 
 def forwards_func(apps, schema_editor):
-    # Load model for make changes
-    pro_cat_model = apps.get_model("mainapp", "ProductCategory")
-    # Load model for make changes
-    pro_model = apps.get_model("mainapp", "Product")
-    # Load model for make changes
-    con_model = apps.get_model("mainapp", "Contact")
+    pro_cat_model = apps.get_model("mainapp", "ProductCategory")  # Load model for make changes
+    pro_model = apps.get_model("mainapp", "Product")  # Load model for make changes
+    con_model = apps.get_model("mainapp", "Contact")  # Load model for make changes
 
     # Create new category
     pro_cat_obj = pro_cat_model.objects.create(pk=1, name="дом", description="отличная мебель для домашнего интерьера.")
@@ -22,7 +19,16 @@ def forwards_func(apps, schema_editor):
         price="2989.50",
         quantity=17,
     )
-
+    pro_model.objects.create(
+        pk=2,
+        category=pro_cat_obj,  # Foreign key
+        name="комфорт 2",
+        image="products_images/product-2.jpg",
+        short_desc="очень комфортный стул",
+        description="подойдет для общения с друзьями",
+        price="3687.2",
+        quantity=21,
+    )
     pro_model.objects.create(
         pk=3,
         category=pro_cat_obj,  # Foreign key
@@ -146,10 +152,8 @@ def forwards_func(apps, schema_editor):
 
 
 def reverse_func(apps, schema_editor):
-    # Load model for make changes
-    pro_cat_model = apps.get_model("mainapp", "ProductCategory")
-    # Load model for make changes
-    con_model = apps.get_model("mainapp", "Contact")
+    pro_cat_model = apps.get_model("mainapp", "ProductCategory")  # Load model for make changes
+    con_model = apps.get_model("mainapp", "Contact")  # Load model for make changes
 
     # Delete all objects
     pro_cat_model.objects.all().delete()

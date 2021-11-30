@@ -14,6 +14,19 @@
     },
     {
         "model": "mainapp.product",
+        "pk": 2,
+        "fields": {
+            "category": 1,
+            "name": "комфорт 2",
+            "image": "products_images/product-2.jpg",
+            "short_desc": "очень комфортный стул",
+            "description": "подойдет для общения с друзьями",
+            "price": "3687.2",
+            "quantity": 21
+        }
+    },
+    {
+        "model": "mainapp.product",
         "pk": 3,
         "fields": {
             "category": 1,
