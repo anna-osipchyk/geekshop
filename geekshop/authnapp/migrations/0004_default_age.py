@@ -8,9 +8,7 @@ from django.utils.timezone import utc
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("authnapp", "0003_merge_20211130_2239"),
-    ]
+    dependencies = [("authnapp", "0003_merge_20211130_2239")]
 
     operations = [
         migrations.AlterField(
@@ -21,8 +19,6 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="shopuser",
-            name="age",
-            field=models.PositiveIntegerField(default=18, verbose_name="возраст"),
+            model_name="shopuser", name="age", field=models.PositiveIntegerField(default=18, verbose_name="возраст")
         ),
     ]

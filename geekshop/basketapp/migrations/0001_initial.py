@@ -9,10 +9,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("mainapp", "0004_fill_db"),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL), ("mainapp", "0004_fill_db")]
 
     operations = [
         migrations.CreateModel(
@@ -29,5 +26,5 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-        ),
+        )
     ]

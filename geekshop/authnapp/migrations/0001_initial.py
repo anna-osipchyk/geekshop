@@ -10,9 +10,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ("auth", "0011_update_proxy_permissions"),
-    ]
+    dependencies = [("auth", "0011_update_proxy_permissions")]
 
     operations = [
         migrations.CreateModel(
@@ -85,13 +83,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "verbose_name": "user",
-                "verbose_name_plural": "users",
-                "abstract": False,
-            },
-            managers=[
-                ("objects", django.contrib.auth.models.UserManager()),
-            ],
-        ),
+            options={"verbose_name": "user", "verbose_name_plural": "users", "abstract": False},
+            managers=[("objects", django.contrib.auth.models.UserManager())],
+        )
     ]
