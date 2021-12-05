@@ -8,9 +8,7 @@ from django.utils.timezone import utc
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("authnapp", "0001_initial"),
-    ]
+    dependencies = [("authnapp", "0001_initial")]
 
     operations = [
         migrations.AddField(

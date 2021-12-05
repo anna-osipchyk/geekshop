@@ -631,10 +631,10 @@ body {
 
 .container {
     width: 1366px;
+    max-width: 1366px;
     margin: 0 auto;
     min-height: 100%;
 }
-
 .slider {
     height: 800px;
     background-image: url(/static/img/slider.jpg);

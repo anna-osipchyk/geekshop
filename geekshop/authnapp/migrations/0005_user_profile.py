@@ -10,9 +10,7 @@ from django.utils.timezone import utc
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("authnapp", "0004_default_age"),
-    ]
+    dependencies = [("authnapp", "0004_default_age")]
 
     operations = [
         migrations.AlterField(
