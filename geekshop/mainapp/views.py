@@ -15,14 +15,21 @@ def main(request):
     return render(request, "mainapp/index.html", content)
 
 
-def get_hot_product():
-    products = Product.objects.filter(is_active=True, category__is_active=True)
-    return random.sample(list(products), 1)[0]
+# def get_hot_product():
+#     products = Product.objects.filter(is_active=True, category__is_active=True)
+#     return random.sample(list(products), 1)[0]
 
 
-def get_same_products(hot_product):
-    same_products = Product.objects.filter(category=hot_product.category, is_active=True).exclude(pk=hot_product.pk)[:3]
-    return same_products
+# def get_same_products(hot_product):
+#     same_products = Product.objects.filter(category=hot_product.category, is_active=True).exclude(pk=hot_product.pk)[:3]
+#     return same_products
+
+
+def get_hot_product_list():
+    products = Product.objects.filter(is_active=True, category__is_active=True).select_related("category")
+    hot_product = random.sample(list(products), 1)[0]
+    hot_list = products.exclude(pk=hot_product.pk)[:3]
+    return (hot_product, hot_list)
 
 
 def products(request, pk=None, page=1):
@@ -55,8 +62,9 @@ def products(request, pk=None, page=1):
             "media_url": settings.MEDIA_URL,
         }
         return render(request, "mainapp/products_list.html", content)
-    hot_product = get_hot_product()
-    same_products = get_same_products(hot_product)
+    # hot_product = get_hot_product()
+    # same_products = get_same_products(hot_product)
+    hot_product, same_products = get_hot_product_list()
     content = {
         "title": title,
         "links_menu": links_menu,
@@ -84,3 +92,38 @@ def contact(request):
     locations = Contact.objects.all()
     content = {"title": title, "visit_date": visit_date, "locations": locations}
     return render(request, "mainapp/contact.html", content)
+class OrderItemsUpdate(UpdateView):
+    model = Order
+    fields = []
+    success_url = reverse_lazy("ordersapp:orders_list")
+
+    def get_context_data(self, **kwargs):
+        data = super(OrderItemsUpdate, self).get_context_data(**kwargs)
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+
+        if self.request.POST:
+            data["orderitems"] = OrderFormSet(self.request.POST, instance=self.object)
+        else:
+            queryset = self.object.orderitems.select_related()
+            formset = OrderFormSet(instance=self.object, queryset=queryset)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial["price"] = form.instance.product.price
+            data["orderitems"] = formset
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        orderitems = context["orderitems"]
+
+        with transaction.atomic():
+            self.object = form.save()
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+
+        # Delete empty order
+        if self.object.get_total_cost() == 0:
+            self.object.delete()
+
+        return super(OrderItemsUpdate, self).form_valid(form)
