@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
@@ -10,8 +11,6 @@ from django.views.generic.detail import DetailView
 from basketapp.models import Basket
 from ordersapp.forms import OrderItemForm
 from ordersapp.models import Order, OrderItem
-
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class OrderList(LoginRequiredMixin, ListView):
@@ -33,7 +32,7 @@ class OrderItemsCreate(CreateView):
         if self.request.POST:
             formset = OrderFormSet(self.request.POST)
         else:
-            basket_items = Basket.get_items(self.request.user)
+            basket_items = self.request.user.basket.select_related().order_by("product__category")
             if len(basket_items):
                 OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=len(basket_items))
                 formset = OrderFormSet()
@@ -112,6 +111,7 @@ class OrderItemsUpdate(UpdateView):
 
         return super(OrderItemsUpdate, self).form_valid(form)
 
+
 class OrderDelete(DeleteView):
     model = Order
     success_url = reverse_lazy("ordersapp:orders_list")
@@ -144,8 +144,9 @@ def product_quantity_update_delete(instance, **kwargs):
     instance.product.save()
 
 
-from mainapp.models import Product
 from django.http import JsonResponse
+
+from mainapp.models import Product
 
 
 def get_product_price(request, pk):
