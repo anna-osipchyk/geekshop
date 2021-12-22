@@ -35,7 +35,20 @@ INSTALLED_APPS = [
 
 # Auth model
 AUTH_USER_MODEL = "authnapp.ShopUser"
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_SECONDS = 120
+CACHE_MIDDLEWARE_KEY_PREFIX = "geekbrains"
 
+# Be carefull if you have Windows! Install Memcached before run project!
+#     https://www.ubergizmo.com/how-to/install-memcached-windows/
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": "127.0.0.1:11211",
+    }
+}
+
+LOW_CACHE = True
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -64,9 +77,9 @@ TEMPLATES = [
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
                 "django.template.context_processors.media",
-            ],
+            ]
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = "geekshop.wsgi.application"
@@ -100,16 +113,16 @@ else:
 if not DEBUG:
     AUTH_PASSWORD_VALIDATORS = [
         {
-            "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+            "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
         },
         {
-            "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+            "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
         },
         {
-            "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+            "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
         },
         {
-            "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+            "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
         },
     ]
 else:
@@ -191,17 +204,13 @@ SOCIAL_AUTH_GITHUB_KEY = github_auth["client_id"]
 SOCIAL_AUTH_GITHUB_SECRET = github_auth["client_secret"]
 
 if DEBUG:
-    INSTALLED_APPS.extend([
-        "debug_toolbar",
-        "template_profiler_panel",
-        "django_extensions",
-    ])
+    INSTALLED_APPS.extend(
+        ["debug_toolbar", "template_profiler_panel", "django_extensions"]
+    )
 
 
 if DEBUG:
-    MIDDLEWARE.extend([
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
-    ])
+    MIDDLEWARE.extend(["debug_toolbar.middleware.DebugToolbarMiddleware"])
 
 # Debgu tool bar settings
 if DEBUG:
@@ -209,9 +218,7 @@ if DEBUG:
     def show_toolbar(request):
         return True
 
-    DEBUG_TOOLBAR_CONFIG = {
-        "SHOW_TOOLBAR_CALLBACK": show_toolbar,
-    }
+    DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": show_toolbar}
 
     DEBUG_TOOLBAR_PANELS = [
         # "ddt_request_history.panels.request_history.RequestHistoryPanel",
